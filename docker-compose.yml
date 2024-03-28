@@ -1,0 +1,22 @@
+version: '3.8'
+networks:
+  oprativ-network:
+    driver: bridge
+services:
+  {{ SERVICE_NAME }}-db:
+    image: postgres:latest
+    container_name: {{ CONTAINER_NAME }}
+    ports:
+        - 5432:5432
+    volumes:
+        - {{ VOLUME_NAME }}-data:/var/lib/postgresql/data
+        - ./init/create-multiple-postgresql-databases.sh:/docker-entrypoint-initdb.d/create-multiple-postgresql-databases.sh
+    environment:
+        POSTGRES_MULTIPLE_DATABASES: "{{ DATABASE_1 }}, {{ DATABASE_2 }}, {{ DATABASE_3 }}"
+        POSTGRES_PASSWORD: {{ PASSWORD }}
+        POSTGRES_USER: "{{ DB_USER }}"
+    networks:
+      - {{ NETWORK_NAME }}
+volumes:
+ {{ VOLUME_NAME }}-data:
+
